@@ -10,13 +10,13 @@ import (
 )
 
 type Issue struct {
-	Expected, Actual any
+	Expected, Actual interface{}
 	Path             []string
 }
 
 type Issues []Issue
 
-func Format(val any) string {
+func Format(val interface{}) string {
 	if val == nil {
 		return "<nil>"
 	}
