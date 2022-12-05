@@ -21,12 +21,12 @@ func TestCompare(t *testing.T) {
 	as := &Simple{I32: 32, I64: 64, U32: 33, U64: 65, Bool: false, Str: "tost"}
 
 	simpleDeltas := []Issue{
-		{es.I32, as.I32, []string{"I32"}},
-		{es.I64, as.I64, []string{"I64"}},
-		{es.U32, as.U32, []string{"U32"}},
-		{es.U64, as.U64, []string{"U64"}},
-		{es.Bool, as.Bool, []string{"Bool"}},
-		{es.Str, as.Str, []string{"Str"}},
+		{es.I32, as.I32, NewPath("I32")},
+		{es.I64, as.I64, NewPath("I64")},
+		{es.U32, as.U32, NewPath("U32")},
+		{es.U64, as.U64, NewPath("U64")},
+		{es.Bool, as.Bool, NewPath("Bool")},
+		{es.Str, as.Str, NewPath("Str")},
 	}
 
 	el := &Lists{
@@ -40,9 +40,9 @@ func TestCompare(t *testing.T) {
 		Mistake: []*Simple{{I32: 2}},
 	}
 	listDeltas := []Issue{
-		{4, 3, []string{"Len", "length"}},
-		{int32(3), int32(2), []string{"Missing", "[2]"}},
-		{int32(1), int32(2), []string{"Mistake", "[0]", "I32"}},
+		{4, 3, NewPath("Len", "length")},
+		{int32(3), int32(2), NewPath("Missing", "[2]")},
+		{int32(1), int32(2), NewPath("Mistake", "[0]", "I32")},
 	}
 
 	complexExpected := &ComplexNested{
@@ -78,7 +78,7 @@ func TestCompare(t *testing.T) {
 		{"similar instances", &Empty{}, &Empty{}, nil},
 		{"same instance", empty, empty, nil},
 		{"different instances", &Empty{}, &Simple{}, []Issue{
-			{"Empty", "Simple", []string{"type"}},
+			{"Empty", "Simple", NewPath("type")},
 		}},
 		{"same simple message", es, es, nil},
 		{"same lists", el, el, nil},
@@ -86,13 +86,13 @@ func TestCompare(t *testing.T) {
 		{"lists", el, al, listDeltas},
 		{"uids", expectedUids, actualUids, nil},
 		{"complex", complexExpected, complexActual, []Issue{
-			{"", "00000000-0000-0000-0000-000000000000", []string{"locs", "[0]", "parent"}},
+			{"", "00000000-0000-0000-0000-000000000000", NewPath("locs", "[0]", "parent")},
 		}},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			actual := Diff(c.e, c.a)
+			actual := Diff(c.e, c.a, nil)
 			diff := cmp.Diff(c.expected, actual)
 			if diff != "" {
 				t.Fatalf(diff)

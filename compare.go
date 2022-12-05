@@ -10,9 +10,10 @@ import (
 	"strings"
 )
 
+// Issue reports a single difference between object trees
 type Issue struct {
 	Expected, Actual interface{}
-	Path             []string
+	Path             *Path
 }
 
 type Issues []Issue
@@ -40,22 +41,14 @@ func Format(val interface{}) string {
 	}
 }
 
-func (d Issue) PathStr() string {
-	return JoinPath(d.Path)
-}
-
-func JoinPath(path []string) string {
-	return strings.Replace(strings.Join(path, "."), ".[", "[", -1)
-}
-
 func (d Issue) String() string {
 	return fmt.Sprintf("Expected %v to be %v but got %v",
-		d.PathStr(),
+		d.Path.String(),
 		Format(d.Expected),
 		Format(d.Actual))
 }
 
-func Diff(expected, actual proto.Message, path ...string) Issues {
+func Diff(expected, actual proto.Message, path *Path) Issues {
 
 	enil, anil := expected == nil, actual == nil
 	if enil && anil {
@@ -77,7 +70,7 @@ func Diff(expected, actual proto.Message, path ...string) Issues {
 	return compare(expected.ProtoReflect(), actual.ProtoReflect(), path)
 }
 
-func compare(expected, actual protoreflect.Message, path []string) (r Issues) {
+func compare(expected, actual protoreflect.Message, path *Path) (r Issues) {
 	e, a := expected, actual
 	ed, ad := e.Descriptor(), a.Descriptor()
 	if ed != ad {
@@ -85,7 +78,7 @@ func compare(expected, actual protoreflect.Message, path []string) (r Issues) {
 		r = append(r, Issue{
 			Expected: string(e.Descriptor().Name()),
 			Actual:   string(a.Descriptor().Name()),
-			Path:     append(path, "type"),
+			Path:     path.Extend("type"),
 		})
 		return r
 	}
@@ -95,7 +88,7 @@ func compare(expected, actual protoreflect.Message, path []string) (r Issues) {
 
 		s := field.TextName()
 
-		pth := append(path, s)
+		pth := path.Extend(s)
 
 		ev := e.Get(field)
 		av := a.Get(field)
@@ -114,16 +107,16 @@ func compare(expected, actual protoreflect.Message, path []string) (r Issues) {
 	return r
 }
 
-func handleList(field protoreflect.FieldDescriptor, ev protoreflect.Value, av protoreflect.Value, pth []string) (r Issues) {
+func handleList(field protoreflect.FieldDescriptor, ev protoreflect.Value, av protoreflect.Value, pth *Path) (r Issues) {
 	el := ev.List()
 	al := av.List()
 
 	if el.Len() != al.Len() {
-		return []Issue{{Expected: el.Len(), Actual: al.Len(), Path: append(pth, "length")}}
+		return []Issue{{Expected: el.Len(), Actual: al.Len(), Path: pth.Extend("length")}}
 	} else {
 		for i := 0; i < el.Len(); i++ {
 			ev, av := el.Get(i), al.Get(i)
-			deltas := handleSingular(field, ev, av, append(pth, fmt.Sprintf("[%d]", i)))
+			deltas := handleSingular(field, ev, av, pth.Extend(fmt.Sprintf("[%d]", i)))
 			r = append(r, deltas...)
 		}
 	}
@@ -174,7 +167,7 @@ func ParseActualUid(s string) (int64, bool) {
 	return i, true
 }
 
-func handleSingular(field protoreflect.FieldDescriptor, ev protoreflect.Value, av protoreflect.Value, pth []string) Issues {
+func handleSingular(field protoreflect.FieldDescriptor, ev protoreflect.Value, av protoreflect.Value, pth *Path) Issues {
 	switch field.Kind() {
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		return compare(ev.Message(), av.Message(), pth)
