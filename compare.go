@@ -45,12 +45,12 @@ func (d Issue) PathStr() string {
 }
 
 func JoinPath(path []string) string {
-	return strings.Join(path, ".")
+	return strings.Replace(strings.Join(path, "."), ".[", "[", -1)
 }
 
 func (d Issue) String() string {
 	return fmt.Sprintf("Expected %v to be %v but got %v",
-		d.Path,
+		d.PathStr(),
 		Format(d.Expected),
 		Format(d.Actual))
 }
@@ -68,9 +68,8 @@ func Diff(expected, actual proto.Message, path ...string) Issues {
 		return []Issue{
 			{
 				Expected: expected,
-
-				Actual: actual,
-				Path:   path,
+				Actual:   actual,
+				Path:     path,
 			},
 		}
 	}

@@ -293,6 +293,125 @@ func (*Nested) Descriptor() ([]byte, []int) {
 	return file_test_proto_rawDescGZIP(), []int{4}
 }
 
+type ComplexNested struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Locs []*ComplexNested_Loc `protobuf:"bytes,1,rep,name=locs,proto3" json:"locs,omitempty"`
+}
+
+func (x *ComplexNested) Reset() {
+	*x = ComplexNested{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_test_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ComplexNested) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ComplexNested) ProtoMessage() {}
+
+func (x *ComplexNested) ProtoReflect() protoreflect.Message {
+	mi := &file_test_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ComplexNested.ProtoReflect.Descriptor instead.
+func (*ComplexNested) Descriptor() ([]byte, []int) {
+	return file_test_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ComplexNested) GetLocs() []*ComplexNested_Loc {
+	if x != nil {
+		return x.Locs
+	}
+	return nil
+}
+
+type ComplexNested_Loc struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// LocType type = 2;
+	Uid     string               `protobuf:"bytes,3,opt,name=uid,proto3" json:"uid,omitempty"`
+	Parent  string               `protobuf:"bytes,4,opt,name=parent,proto3" json:"parent,omitempty"`
+	Chidren []*ComplexNested_Loc `protobuf:"bytes,5,rep,name=chidren,proto3" json:"chidren,omitempty"`
+}
+
+func (x *ComplexNested_Loc) Reset() {
+	*x = ComplexNested_Loc{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_test_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ComplexNested_Loc) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ComplexNested_Loc) ProtoMessage() {}
+
+func (x *ComplexNested_Loc) ProtoReflect() protoreflect.Message {
+	mi := &file_test_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ComplexNested_Loc.ProtoReflect.Descriptor instead.
+func (*ComplexNested_Loc) Descriptor() ([]byte, []int) {
+	return file_test_proto_rawDescGZIP(), []int{5, 0}
+}
+
+func (x *ComplexNested_Loc) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ComplexNested_Loc) GetUid() string {
+	if x != nil {
+		return x.Uid
+	}
+	return ""
+}
+
+func (x *ComplexNested_Loc) GetParent() string {
+	if x != nil {
+		return x.Parent
+	}
+	return ""
+}
+
+func (x *ComplexNested_Loc) GetChidren() []*ComplexNested_Loc {
+	if x != nil {
+		return x.Chidren
+	}
+	return nil
+}
+
 var File_test_proto protoreflect.FileDescriptor
 
 var file_test_proto_rawDesc = []byte{
@@ -313,8 +432,19 @@ var file_test_proto_rawDesc = []byte{
 	0x67, 0x12, 0x25, 0x0a, 0x07, 0x4d, 0x69, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x18, 0x04, 0x20, 0x03,
 	0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x73, 0x65, 0x71, 0x2e, 0x53, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x52,
 	0x07, 0x4d, 0x69, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x22, 0x08, 0x0a, 0x06, 0x4e, 0x65, 0x73, 0x74,
-	0x65, 0x64, 0x42, 0x0d, 0x5a, 0x0b, 0x67, 0x6f, 0x2d, 0x6c, 0x69, 0x74, 0x65, 0x2f, 0x73, 0x65,
-	0x71, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x64, 0x22, 0xb2, 0x01, 0x0a, 0x0d, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x78, 0x4e, 0x65,
+	0x73, 0x74, 0x65, 0x64, 0x12, 0x2a, 0x0a, 0x04, 0x6c, 0x6f, 0x63, 0x73, 0x18, 0x01, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x16, 0x2e, 0x73, 0x65, 0x71, 0x2e, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x78,
+	0x4e, 0x65, 0x73, 0x74, 0x65, 0x64, 0x2e, 0x4c, 0x6f, 0x63, 0x52, 0x04, 0x6c, 0x6f, 0x63, 0x73,
+	0x1a, 0x75, 0x0a, 0x03, 0x4c, 0x6f, 0x63, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x75,
+	0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x69, 0x64, 0x12, 0x16, 0x0a,
+	0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70,
+	0x61, 0x72, 0x65, 0x6e, 0x74, 0x12, 0x30, 0x0a, 0x07, 0x63, 0x68, 0x69, 0x64, 0x72, 0x65, 0x6e,
+	0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x73, 0x65, 0x71, 0x2e, 0x43, 0x6f, 0x6d,
+	0x70, 0x6c, 0x65, 0x78, 0x4e, 0x65, 0x73, 0x74, 0x65, 0x64, 0x2e, 0x4c, 0x6f, 0x63, 0x52, 0x07,
+	0x63, 0x68, 0x69, 0x64, 0x72, 0x65, 0x6e, 0x42, 0x0d, 0x5a, 0x0b, 0x67, 0x6f, 0x2d, 0x6c, 0x69,
+	0x74, 0x65, 0x2f, 0x73, 0x65, 0x71, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -329,21 +459,25 @@ func file_test_proto_rawDescGZIP() []byte {
 	return file_test_proto_rawDescData
 }
 
-var file_test_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_test_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_test_proto_goTypes = []interface{}{
-	(*Empty)(nil),  // 0: seq.Empty
-	(*Simple)(nil), // 1: seq.Simple
-	(*Uids)(nil),   // 2: seq.Uids
-	(*Lists)(nil),  // 3: seq.Lists
-	(*Nested)(nil), // 4: seq.Nested
+	(*Empty)(nil),             // 0: seq.Empty
+	(*Simple)(nil),            // 1: seq.Simple
+	(*Uids)(nil),              // 2: seq.Uids
+	(*Lists)(nil),             // 3: seq.Lists
+	(*Nested)(nil),            // 4: seq.Nested
+	(*ComplexNested)(nil),     // 5: seq.ComplexNested
+	(*ComplexNested_Loc)(nil), // 6: seq.ComplexNested.Loc
 }
 var file_test_proto_depIdxs = []int32{
 	1, // 0: seq.Lists.Mistake:type_name -> seq.Simple
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	6, // 1: seq.ComplexNested.locs:type_name -> seq.ComplexNested.Loc
+	6, // 2: seq.ComplexNested.Loc.chidren:type_name -> seq.ComplexNested.Loc
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_test_proto_init() }
@@ -412,6 +546,30 @@ func file_test_proto_init() {
 				return nil
 			}
 		}
+		file_test_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ComplexNested); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_test_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ComplexNested_Loc); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -419,7 +577,7 @@ func file_test_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_test_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

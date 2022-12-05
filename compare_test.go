@@ -45,6 +45,17 @@ func TestCompare(t *testing.T) {
 		{int32(1), int32(2), []string{"Mistake", "[0]", "I32"}},
 	}
 
+	complexExpected := &ComplexNested{
+		Locs: []*ComplexNested_Loc{
+			{Uid: "uid:1", Name: "Shelf1"},
+		},
+	}
+	complexActual := &ComplexNested{
+		Locs: []*ComplexNested_Loc{
+			{Uid: "00000000-0000-0000-0000-000000000001", Name: "Shelf1", Parent: "00000000-0000-0000-0000-000000000000"},
+		},
+	}
+
 	expectedUids := &Uids{Uid: []string{
 		"00000000-0000-0000-0000-000000000001",
 		"uid:1",
@@ -74,6 +85,7 @@ func TestCompare(t *testing.T) {
 		{"nested fields", es, as, simpleDeltas},
 		{"lists", el, al, listDeltas},
 		{"uids", expectedUids, actualUids, nil},
+		{"complex", complexExpected, complexActual, nil},
 	}
 
 	for _, c := range cases {

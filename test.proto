@@ -35,3 +35,18 @@ message Lists {
 message Nested {
 
 }
+
+
+message ComplexNested {
+  message Loc {
+    string name = 1;
+    //LocType type = 2;
+    string uid = 3;
+    string parent = 4;
+
+    repeated Loc chidren = 5;
+  }
+  repeated Loc locs = 1;
+
+}
+
