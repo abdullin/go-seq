@@ -1,6 +1,8 @@
 package seq
 
-import "strings"
+import (
+	"strings"
+)
 
 // Immutable, append-only structure that tracks property path in object
 // It is implemented as a linked list.
@@ -24,19 +26,23 @@ func (p *Path) Extend(s string) *Path {
 		Parent: p,
 	}
 }
+func reverse(ss []string) {
+	last := len(ss) - 1
+	for i := 0; i < len(ss)/2; i++ {
+		ss[i], ss[last-i] = ss[last-i], ss[i]
+	}
+}
 
 func (p *Path) String() string {
 	// cheap way to build path
 	var list []string
 
 	current := p
-	for {
+	for current != nil {
 		list = append(list, current.Value)
-		if current.Parent == nil {
-			break
-		}
-		current = p.Parent
+		current = current.Parent
 	}
+	reverse(list)
 
 	joined := strings.Join(list, ".")
 	clean := strings.Replace(joined, ".[", "[", -1)
