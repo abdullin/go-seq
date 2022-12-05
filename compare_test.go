@@ -16,7 +16,8 @@ func TestCompare(t *testing.T) {
 
 	empty := &Empty{}
 
-	es := &Simple{I32: -32, I64: -64, U32: 32, U64: 64, Bool: true, Str: "test"}
+	es := &Simple{I32: -32, I64: -64, U32: 32, U64: 64, Bool: true,
+		Str: "test"}
 	as := &Simple{I32: 32, I64: 64, U32: 33, U64: 65, Bool: false, Str: "tost"}
 
 	simpleDeltas := []Issue{
@@ -44,6 +45,24 @@ func TestCompare(t *testing.T) {
 		{int32(1), int32(2), []string{"Mistake", "[0]", "I32"}},
 	}
 
+	expectedUids := &Uids{Uid: []string{
+		"00000000-0000-0000-0000-000000000001",
+		"uid:1",
+		"00000000-0000-0000-0000-000000000000",
+		"uid:0",
+		"uid:0",
+	}}
+
+	actualUids := &Uids{
+		Uid: []string{
+			"00000000-0000-0000-0000-000000000001",
+			"00000000-0000-0000-0000-000000000001",
+			"00000000-0000-0000-0000-000000000000",
+			"00000000-0000-0000-0000-000000000000",
+			"",
+		},
+	}
+
 	cases := []*test{
 		{"similar instances", &Empty{}, &Empty{}, nil},
 		{"same instance", empty, empty, nil},
@@ -54,6 +73,7 @@ func TestCompare(t *testing.T) {
 		{"same lists", el, el, nil},
 		{"nested fields", es, as, simpleDeltas},
 		{"lists", el, al, listDeltas},
+		{"uids", expectedUids, actualUids, nil},
 	}
 
 	for _, c := range cases {

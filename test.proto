@@ -17,6 +17,14 @@ message Simple {
   string Str = 6;
 }
 
+
+message Uids {
+  repeated string Uid = 1;
+}
+
+
+
+
 message Lists {
   repeated int32 Len = 1;
   repeated int32 Missing = 2;

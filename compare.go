@@ -6,6 +6,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -130,11 +131,75 @@ func handleList(field protoreflect.FieldDescriptor, ev protoreflect.Value, av pr
 	return r
 }
 
+func ParseExpectedUuid(s string) (i int64, ok bool) {
+
+	if !strings.HasPrefix(s, "uid:") {
+		return 0, false
+	}
+
+	i, err := strconv.ParseInt(s[4:], 10, 64)
+	if err != nil {
+		return 0, false
+	}
+	return i, true
+}
+
+func ParseExpectedUid(s string) (int64, bool) {
+	if !strings.HasPrefix(s, "uid:") {
+		return 0, false
+	}
+	i, err := strconv.ParseInt(s[4:], 10, 64)
+	if err != nil {
+		return 0, false
+	}
+	return i, true
+}
+
+func ParseActualUid(s string) (int64, bool) {
+	if len(s) == 0 {
+		return 0, true
+	}
+	if !strings.HasPrefix(s, "00000000") {
+		return 0, false
+	}
+
+	trimmed := strings.TrimLeft(s, "0-")
+	if len(trimmed) == 0 {
+		return 0, true
+	}
+
+	i, err := strconv.ParseInt(trimmed, 10, 64)
+	if err != nil {
+		return 0, false
+	}
+	return i, true
+}
+
 func handleSingular(field protoreflect.FieldDescriptor, ev protoreflect.Value, av protoreflect.Value, pth []string) Issues {
 	switch field.Kind() {
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		return compare(ev.Message(), av.Message(), pth)
 	default:
+
+		if field.Kind() == protoreflect.StringKind {
+			// special case - we are hunting for guids
+
+			if eu, ok := ParseExpectedUid(ev.String()); ok {
+				if au, ok := ParseActualUid(av.String()); ok {
+					if eu == au {
+						return nil
+					} else {
+						return []Issue{{
+							Expected: fmt.Sprintf("uid:%d", eu),
+							Actual:   fmt.Sprintf("uid:%d", au),
+							Path:     pth,
+						}}
+					}
+				}
+			}
+
+		}
+
 		if !reflect.DeepEqual(ev.Interface(), av.Interface()) {
 			return []Issue{{
 				Expected: ev.Interface(),
