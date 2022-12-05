@@ -85,7 +85,9 @@ func TestCompare(t *testing.T) {
 		{"nested fields", es, as, simpleDeltas},
 		{"lists", el, al, listDeltas},
 		{"uids", expectedUids, actualUids, nil},
-		{"complex", complexExpected, complexActual, nil},
+		{"complex", complexExpected, complexActual, []Issue{
+			{"", "00000000-0000-0000-0000-000000000000", []string{"locs", "[0]", "parent"}},
+		}},
 	}
 
 	for _, c := range cases {
