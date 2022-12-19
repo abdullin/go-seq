@@ -148,9 +148,6 @@ func ParseExpectedUid(s string) (int64, bool) {
 }
 
 func ParseActualUid(s string) (int64, bool) {
-	if len(s) == 0 {
-		return 0, true
-	}
 	if !strings.HasPrefix(s, "00000000") {
 		return 0, false
 	}

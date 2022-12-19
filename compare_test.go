@@ -61,7 +61,6 @@ func TestCompare(t *testing.T) {
 		"uid:1",
 		"00000000-0000-0000-0000-000000000000",
 		"uid:0",
-		"uid:0",
 	}}
 
 	actualUids := &Uids{
@@ -70,7 +69,6 @@ func TestCompare(t *testing.T) {
 			"00000000-0000-0000-0000-000000000001",
 			"00000000-0000-0000-0000-000000000000",
 			"00000000-0000-0000-0000-000000000000",
-			"",
 		},
 	}
 
@@ -95,7 +93,7 @@ func TestCompare(t *testing.T) {
 			actual := Diff(c.e, c.a, nil)
 			diff := cmp.Diff(c.expected, actual)
 			if diff != "" {
-				t.Fatalf(diff)
+				t.Fatalf(c.name + diff)
 			}
 		})
 	}
